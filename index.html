@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jack l’Éventreur — Whitechapel, 1888</title>
+  <style>
+    :root {
+      --bg: #0b0b0d;
+      --panel: #151417;
+      --panel-2: #1d1c21;
+      --text: #d8d2c6;
+      --muted: #8d877c;
+      --accent: #a3141b;
+      --accent-2: #d4a017;
+      --border: #2c2a30;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    a { color: var(--accent-2); text-decoration: none; }
+
+    h1, h2, h3 { font-weight: normal; letter-spacing: 1px; }
+
+    /* ---------- Navigation ---------- */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 6%;
+      background: rgba(11, 11, 13, 0.85);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo { color: var(--accent); font-size: 1.1rem; letter-spacing: 2px; }
+    nav ul { display: flex; gap: 22px; list-style: none; flex-wrap: wrap; }
+    nav a { color: var(--muted); font-size: 0.95rem; transition: color .2s; }
+    nav a:hover { color: var(--accent-2); }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 120px 20px 80px;
+      position: relative;
+      background:
+        radial-gradient(ellipse at 50% 120%, rgba(163, 20, 27, 0.35), transparent 60%),
+        linear-gradient(180deg, #050506 0%, #121116 100%);
+      overflow: hidden;
+    }
+    .fog {
+      position: absolute;
+      left: -50%; width: 200%; height: 220px;
+      background: radial-gradient(ellipse, rgba(200,200,210,0.09), transparent 70%);
+      animation: drift 28s linear infinite;
+      pointer-events: none;
+    }
+    .fog.f1 { top: 30%; }
+    .fog.f2 { top: 60%; animation-duration: 40s; animation-direction: reverse; }
+    @keyframes drift {
+      from { transform: translateX(0); }
+      to { transform: translateX(25%); }
+    }
+    .hero .kicker {
+      color: var(--muted);
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      margin-bottom: 18px;
+    }
+    .hero h1 {
+      font-size: clamp(2.6rem, 8vw, 5.5rem);
+      color: #f1ebe0;
+      text-shadow: 0 0 30px rgba(163,20,27,0.5);
+      line-height: 1.1;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p.lead {
+      max-width: 620px;
+      margin: 24px auto 36px;
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+    .btn {
+      display: inline-block;
+      border: 1px solid var(--accent);
+      color: var(--text);
+      padding: 12px 28px;
+      background: transparent;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      transition: all .25s;
+    }
+    .btn:hover { background: var(--accent); color: #fff; }
+    .btn.gold { border-color: var(--accent-2); }
+    .btn.gold:hover { background: var(--accent-2); color: #111; }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 26px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      letter-spacing: 3px;
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity: .3; } 50% { opacity: 1; } }
+
+    /* ---------- Common sections ---------- */
+    section { padding: 100px 6%; }
+    section:nth-of-type(even) { background: var(--panel); }
+    .section-title { text-align: center; margin-bottom: 14px; font-size: clamp(1.8rem, 4vw, 2.6rem); color: #f1ebe0; }
+    .section-sub { text-align: center; color: var(--muted); max-width: 680px; margin: 0 auto 50px; }
+    .divider {
+      width: 80px; height: 2px; background: var(--accent);
+      margin: 0 auto 20px;
+    }
+
+    /* ---------- Intro ---------- */
+    .intro-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .stat {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      padding: 30px 24px;
+      text-align: center;
+    }
+    .stat .num { font-size: 2.6rem; color: var(--accent); display: block; }
+    .stat .label { color: var(--muted); font-size: 0.95rem; }
+
+    .prose {
+      max-width: 820px;
+      margin: 50px auto 0;
+      font-size: 1.08rem;
+      color: #bfb8ab;
+    }
+    .prose p + p { margin-top: 16px; }
+    .prose .drop::first-letter {
+      float: left;
+      font-size: 4rem;
+      line-height: 0.9;
+      padding: 6px 10px 0 0;
+      color: var(--accent);
+    }
+
+    /* ---------- Timeline ---------- */
+    .timeline-tabs {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+    .tab {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 8px 16px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s;
+    }
+    .tab:hover { color: var(--text); }
+    .tab.active { border-color: var(--accent); color: #fff; background: rgba(163,20,27,0.2); }
+
+    .timeline-card {
+      max-width: 760px;
+      margin: 0 auto;
+      background: var(--panel-2);
+      border-left: 4px solid var(--accent);
+      padding: 34px 36px;
+      min-height: 230px;
+      animation: fadeIn .5s ease;
+    }
+    .timeline-card .date { color: var(--accent-2); font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; }
+    .timeline-card h3 { font-size: 1.6rem; margin: 8px 0 14px; color: #f1ebe0; }
+    .timeline-card p { color: #bfb8ab; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+    /* ---------- Victims ---------- */
+    .victims-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .victim {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      padding: 26px;
+      cursor: pointer;
+      transition: transform .25s, border-color .25s;
+      position: relative;
+    }
+    .victim:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .victim .initials {
+      width: 58px; height: 58px;
+      border-radius: 50%;
+      border: 1px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+    }
+    .victim h3 { font-size: 1.3rem; color: #f1ebe0; }
+    .victim .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 10px; }
+    .victim .details {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border);
+      color: #bfb8ab;
+      font-size: 0.95rem;
+    }
+    .victim.open .details { display: block; animation: fadeIn .4s ease; }
+    .victim .hint { color: var(--accent-2); font-size: 0.8rem; letter-spacing: 1px; }
+
+    /* ---------- Map ---------- */
+    .map-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+      background: #0f0f12;
+      border: 1px solid var(--border);
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+    }
+    .map-wrap svg { width: 100%; height: 100%; }
+    .pin {
+      cursor: pointer;
+      transition: r .2s;
+    }
+    .pin circle.core { fill: var(--accent); }
+    .pin circle.ring {
+      fill: none; stroke: var(--accent); stroke-width: 1.5;
+      animation: ping 2s ease-out infinite;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+    .pin:hover circle.core { fill: var(--accent-2); }
+    @keyframes ping {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(3); opacity: 0; }
+    }
+    .map-info {
+      max-width: 900px;
+      margin: 20px auto 0;
+      min-height: 80px;
+      text-align: center;
+      color: #bfb8ab;
+      border: 1px solid var(--border);
+      padding: 18px;
+      background: var(--panel-2);
+    }
+    .map-info strong { color: var(--accent-2); }
+
+    /* ---------- Suspects ---------- */
+    .suspects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 22px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .suspect {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      padding: 26px;
+      position: relative;
+      overflow: hidden;
+    }
+    .suspect h3 { font-size: 1.25rem; color: #f1ebe0; margin-bottom: 4px; }
+    .suspect .role { color: var(--muted); font-size: 0.88rem; margin-bottom: 14px; font-style: italic; }
+    .suspect p { color: #bfb8ab; font-size: 0.95rem; }
+    .meter { margin-top: 16px; }
+    .meter .bar {
+      height: 6px; background: #2a282e; margin-top: 6px; overflow: hidden;
+    }
+    .meter .fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transition: width 1.2s ease;
+    }
+    .meter small { color: var(--muted); font-size: 0.8rem; }
+    .stamp {
+      position: absolute;
+      top: 18px; right: -34px;
+      transform: rotate(35deg);
+      background: #3a0d10;
+      color: #e4a4a7;
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      padding: 4px 40px;
+    }
+    .stamp.cleared { background: #1a2a1a; color: #a6d6a6; }
+
+    /* ---------- Letter ---------- */
+    .letter-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      background: #ece3cf;
+      color: #2a1e12;
+      padding: 50px 60px;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      transform: rotate(-0.6deg);
+      background-image: radial-gradient(circle at 20% 10%, rgba(120,80,30,0.12), transparent 40%),
+                        radial-gradient(circle at 80% 90%, rgba(120,80,30,0.15), transparent 45%);
+    }
+    .letter-wrap .handwriting {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 1rem;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      min-height: 220px;
+    }
+    .letter-wrap .sign {
+      margin-top: 22px;
+      font-family: "Courier New", monospace;
+      font-style: italic;
+    }
+    .letter-controls { text-align: center; margin-top: 30px; }
+    .cursor::after {
+      content: "|";
+      animation: blink 1s steps(1) infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ---------- Quiz ---------- */
+    .quiz {
+      max-width: 720px;
+      margin: 0 auto;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      padding: 36px;
+    }
+    .quiz .progress { color: var(--muted); font-size: 0.9rem; margin-bottom: 14px; }
+    .quiz h3 { font-size: 1.35rem; color: #f1ebe0; margin-bottom: 22px; }
+    .options { display: grid; gap: 12px; }
+    .option {
+      text-align: left;
+      background: #101014;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 14px 18px;
+      font-family: inherit;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .option:hover:not([disabled]) { border-color: var(--accent-2); }
+    .option.correct { background: #173317; border-color: #3d9a3d; }
+    .option.wrong { background: #3a1214; border-color: var(--accent); }
+    .option[disabled] { cursor: default; }
+    .quiz .explain {
+      margin-top: 18px;
+      color: #bfb8ab;
+      min-height: 48px;
+      font-size: 0.97rem;
+    }
+    .quiz .next-row { margin-top: 18px; text-align: right; }
+    .result { text-align: center; }
+    .result .score { font-size: 3rem; color: var(--accent-2); }
+
+    /* ---------- Footer ---------- */
+    footer {
+      text-align: center;
+      padding: 50px 6%;
+      color: var(--muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border);
+    }
+    footer .blood { color: var(--accent); letter-spacing: 6px; margin-bottom: 10px; }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 720px) {
+      nav { flex-direction: column; gap: 10px; }
+      nav ul { justify-content: center; gap: 14px; }
+      .letter-wrap { padding: 30px 24px; }
+      .timeline-card { padding: 24px; }
+      .quiz { padding: 24px; }
+      .stamp { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">J.T.R. 1888</div>
+    <ul>
+      <li><a href="#intro">Introduction</a></li>
+      <li><a href="#timeline">Chronologie</a></li>
+      <li><a href="#victims">Victimes</a></li>
+      <li><a href="#map">Carte</a></li>
+      <li><a href="#suspects">Suspects</a></li>
+      <li><a href="#letter">Lettre</a></li>
+      <li><a href="#quiz">Quiz</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="fog f1"></div>
+    <div class="fog f2"></div>
+    <div class="kicker">Londres · Whitechapel · 1888</div>
+    <h1>Jack l’<span>Éventreur</span></h1>
+    <p class="lead">
+      L’une des affaires de meurtres en série non élucidées les plus célèbres de l’histoire. À l’automne 1888
+      un homme arpentait les rues étroites de l’East End londonien, ne laissant derrière lui que la peur,
+      des énigmes et une question qui reste sans réponse : qui était-il ?
+    </p>
+    <a href="#intro" class="btn">Commencer l’enquête</a>
+    <div class="scroll-hint">↓ FAITES DÉFILER ↓</div>
+  </header>
+
+  <!-- INTRO -->
+  <section id="intro">
+    <h2 class="section-title">Une nuit sans nom</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Les chiffres qui sont devenus le point de départ d’une légende</p>
+
+    <div class="intro-grid">
+      <div class="stat"><span class="num" id="count1">0</span><span class="label">victimes connues</span></div>
+      <div class="stat"><span class="num" id="count2">0</span><span class="label">mois d’activité</span></div>
+      <div class="stat"><span class="num" id="count3">0</span><span class="label">suspects sur la célèbre liste</span></div>
+      <div class="stat"><span class="num">∞</span><span class="label">théories et versions</span></div>
+    </div>
+
+    <div class="prose">
+      <p class="drop">Entre le 31 août et le 9 novembre 1888, cinq femmes furent assassinées dans le quartier de Whitechapel. Toutes
+      appartenaient aux couches les plus pauvres de la population et se livraient au commerce de rue ou à la prostitution. Les meurtres se distinguaient par
+      leur extrême brutalité, et le criminel semblait posséder certaines connaissances médicales ou anatomiques.</p>
+      <p>Le surnom « Jack l’Éventreur » est apparu grâce à une lettre envoyée à la presse. Cette lettre,
+      signée « Dear Boss », est largement considérée comme un canular, pourtant le nom s’est imposé et est entré pour de bon dans la culture populaire :
+      livres, films, séries et débats interminables entre historiens.</p>
+      <p>La police de Londres, y compris Scotland Yard, a interrogé des centaines de personnes, examiné des milliers d’indices et arrêté
+      plusieurs suspects. Aucune accusation n’a jamais été retenue. L’affaire est officiellement restée non élucidée.</p>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section id="timeline">
+    <h2 class="section-title">Chronique des crimes</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Sélectionnez une date pour en savoir plus</p>
+
+    <div class="timeline-tabs" id="tabs"></div>
+    <div class="timeline-card" id="timelineCard"></div>
+  </section>
+
+  <!-- VICTIMS -->
+  <section id="victims">
+    <h2 class="section-title">Victimes</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Cliquez sur une carte pour en savoir plus sur chacune d’elles</p>
+
+    <div class="victims-grid" id="victimsGrid"></div>
+  </section>
+
+  <!-- MAP -->
+  <section id="map">
+    <h2 class="section-title">Carte des crimes</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Lieux où les corps ont été découverts. Survolez ou cliquez sur un point</p>
+
+    <div class="map-wrap">
+      <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet" aria-label="Carte de Whitechapel">
+        <!-- Rues -->
+        <g stroke="#2c2a30" fill="none" stroke-width="2">
+          <path d="M0 120 Q200 100 400 150 T800 130"/>
+          <path d="M0 260 Q250 240 420 280 T800 300"/>
+          <path d="M0 400 Q300 380 500 420 T800 410"/>
+          <path d="M150 0 Q170 200 140 500"/>
+          <path d="M330 0 Q310 250 360 500"/>
+          <path d="M520 0 Q540 250 500 500"/>
+          <path d="M660 0 Q650 250 690 500" stroke-width="1"/>
+        </g>
+        <!-- Tamise -->
+        <path d="M0 470 Q200 440 400 480 T800 460 L800 500 L0 500 Z" fill="#0c1a24" opacity="0.8"/>
+        <text x="30" y="492" fill="#3a4f5e" font-size="14" font-family="Georgia">Tamise</text>
+
+        <g class="pin" data-id="0" transform="translate(120,130)">
+          <circle class="ring" r="8"/><circle class="core" r="6"/>
+          <text x="14" y="4" fill="#d8d2c6" font-size="13" font-family="Georgia">Buck's Row</text>
+        </g>
+        <g class="pin" data-id="1" transform="translate(300,230)">
+          <circle class="ring" r="8"/><circle class="core" r="6"/>
+          <text x="14" y="4" fill="#d8d2c6" font-size="13" font-family="Georgia">Hanbury St.</text>
+        </g>
+        <g class="pin" data-id="2" transform="translate(440,350)">
+          <circle class="ring" r="8"/><circle class="core" r="6"/>
+          <text x="14" y="4" fill="#d8d2c6" font-size="13" font-family="Georgia">Berner St.</text>
+        </g>
+        <g class="pin" data-id="3" transform="translate(560,290)">
+          <circle class="ring" r="8"/><circle class="core" r="6"/>
+          <text x="14" y="4" fill="#d8d2c6" font-size="13" font-family="Georgia">Mitre Sq.</text>
+        </g>
+        <g class="pin" data-id="4" transform="translate(640,190)">
+          <circle class="ring" r="8"/><circle class="core" r="6"/>
+          <text x="14" y="4" fill="#d8d2c6" font-size="13" font-family="Georgia">Miller's Ct.</text>
+        </g>
+      </svg>
+    </div>
+    <div class="map-info" id="mapInfo">Sélectionnez un point sur la carte.</div>
+  </section>
+
+  <!-- SUSPECTS -->
+  <section id="suspects">
+    <h2 class="section-title">Suspects</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Des noms que les historiens discutent depuis des décennies. L’échelle indique la popularité de la théorie parmi les chercheurs — ce n’est pas une preuve</p>
+
+    <div class="suspects-grid" id="suspectsGrid"></div>
+  </section>
+
+  <!-- LETTER -->
+  <section id="letter">
+    <h2 class="section-title">La lettre « Dear Boss »</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Lettre envoyée à la presse le 25 septembre 1888. Appuyez sur le bouton pour la « taper »</p>
+
+    <div class="letter-wrap">
+      <div class="handwriting" id="letterText"></div>
+      <div class="sign" id="letterSign" style="opacity:0"></div>
+    </div>
+    <div class="letter-controls">
+      <button class="btn gold" id="letterBtn">Lire la lettre</button>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz">
+    <h2 class="section-title">Testez vos connaissances</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Cinq questions sur l’affaire. Bonne chance, détective</p>
+
+    <div class="quiz" id="quizBox"></div>
+  </section>
+
+  <footer>
+    <div class="blood">✦ ✦ ✦</div>
+    <p>Page créée à des fins éducatives. L’identité du criminel n’a toujours pas été établie.</p>
+    <p style="margin-top:8px;">© 1888 / 2026 · Whitechapel se souvient</p>
+  </footer>
+
+<script>
+  /* ---------- Données ---------- */
+  const timeline = [
+    {
+      date: "31 août 1888",
+      title: "Mary Ann Nichols · Buck’s Row",
+      text: "Le corps de Mary Ann Nichols, 43 ans, fut découvert tôt le matin dans Buck’s Row. Gorge tranchée, abdomen ouvert. Ce fut le premier meurtre que la police relia à la série."
+    },
+    {
+      date: "8 septembre 1888",
+      title: "Annie Chapman · Hanbury Street",
+      text: "Dans la cour arrière d’une maison de Hanbury Street fut découvert le corps d’Annie Chapman, 47 ans. C’est le premier meurtre que de nombreux chercheurs associent fermement à la série, et c’est ici qu’apparaissent pour la première fois les théories sur les compétences « médicales » de l’assassin."
+    },
+    {
+      date: "25 septembre 1888",
+      title: "Lettre à la presse",
+      text: "Une lettre signée « Jack the Ripper » arrive à la Central News Agency. Elle contient des détails macabres et des promesses de nouveaux crimes. De nombreux experts la considèrent comme un faux."
+    },
+    {
+      date: "30 septembre 1888",
+      title: "« La Longue Nuit »",
+      text: "Deux meurtres commis en une seule nuit : Elizabeth Stride dans Berner Street et Catherine Eddowes dans Mitre Square. Eddowes, d’après l’autopsie, fut mutilée avec une particulière cruauté. La nuit fut baptisée « Long Night »."
+    },
+    {
+      date: "9 novembre 1888",
+      title: "Mary Jane Kelly · Miller’s Court",
+      text: "Le dernier et le plus sauvage des meurtres. Mary Jane Kelly, environ 25 ans, fut tuée dans sa propre chambre de Miller’s Court. En raison de la nature du crime, la police ne put établir qu’approximativement l’heure de la mort."
+    }
+  ];
+
+  const victims = [
+    { name: "Mary Ann Nichols", initials: "MN", age: "43 ans", date: "31 août 1888", info: "Travaillait dans la rue, vivait dans des maisons de logement commun. Souvent appelée « Polly ». Elle fut vue vivante pour la dernière fois dans la maison où elle logeait — quelques heures avant sa mort." },
+    { name: "Annie Chapman", initials: "AC", age: "47 ans", date: "8 septembre 1888", info: "Souffrait de maladie et d’alcoolisme. Avant sa mort, elle travaillait à la journée et tentait de gagner de quoi se loger. Ses derniers jours sont décrits dans les dépositions de voisins et de connaissances." },
+    { name: "Elizabeth Stride", initials: "ES", age: "44 ans", date: "30 septembre 1888", info: "Trouvée à l’entrée d’une cour de Berner Street. L’assassin a peut-être été interrompu — il existe des témoignages de bruit et de personnes à proximité. Sa mort est souvent considérée comme une partie « incomplète » de la série." },
+    { name: "Catherine Eddowes", initials: "KE", age: "46 ans", date: "30 septembre 1888", info: "Tuée dans Mitre Square environ une heure après Stride. Son corps fut mutilé plus sévèrement que celui de toutes les victimes précédentes. Une partie de son tablier fut trouvée dans une rue voisine." },
+    { name: "Mary Jane Kelly", initials: "MK", age: "environ 25 ans", date: "9 novembre 1888", info: "La dernière des cinq victimes « canoniques ». Tuée dans sa propre chambre. En raison de la gravité du crime et de l’absence de photographies du corps, de nombreux détails font encore débat." }
+  ];
+
+  const suspects = [
+    { name: "Montague John Druitt", role: "Avocat et maître d’école, Londres", text: "Juriste et professeur de cricket. Se suicida à la fin de 1888. La police le nomma en privé comme l’un des suspects.", pop: 45 },
+    { name: "Aaron Kosminski", role: "Coiffeur, immigrant polonais", text: "Homme mentalement instable interné dans un asile. Un témoin l’identifia, mais l’identification ne fut jamais confirmée en justice.", pop: 70 },
+    { name: "Michael Ostrog", role: "Voleur et escroc", text: "Criminel bien connu parfois lié à l’East End de 1888. Aucune preuve de son implication n’a été trouvée.", pop: 25 },
+    { name: "Francis Tumblety", role: "Médecin charlatan américain", text: "Entrepreneur s’intéressant à la chirurgie. Arrêté à Londres en novembre 1888, plus tard disculpé des accusations connexes.", pop: 30 },
+    { name: "James Maybrick", role: "Négociant en coton de Liverpool", text: "Figure apparue grâce au « journal de Maybrick », révélé comme un faux des années 1990. La théorie est considérée comme un canular.", pop: 10 },
+    { name: "Walter Sickert", role: "Peintre", text: "Artiste célèbre à qui l’on a attribué la paternité de la lettre « Dear Boss ». Populaire dans les livres, mais aucune preuve directe n’existe.", pop: 35 }
+  ];
+
+  const mapData = [
+    "<strong>Buck’s Row</strong> · Mary Ann Nichols · 31 août 1888. Une rue tranquille où le corps fut trouvé presque sur la chaussée.",
+    "<strong>Hanbury Street</strong> · Annie Chapman · 8 septembre 1888. Corps trouvé dans la cour arrière d’une maison, près de l’entrée des locataires.",
+    "<strong>Berner Street</strong> · Elizabeth Stride · 30 septembre 1888. Corps trouvé aux portes d’une cour où se tenait un club.",
+    "<strong>Mitre Square</strong> · Catherine Eddowes · 30 septembre 1888. Corps trouvé dans un coin de la place, moins d’une heure après Stride.",
+    "<strong>Miller’s Court</strong> · Mary Jane Kelly · 9 novembre 1888. Le seul meurtre commis à l’intérieur d’un bâtiment."
+  ];
+
+  const quizData = [
+    { q: "Dans quel quartier de Londres les meurtres ont-ils eu lieu ?", options: ["Westminster", "Whitechapel", "Soho", "Camden"], correct: 1, explain: "Les cinq meurtres « canoniques » se sont produits dans le quartier de Whitechapel, dans l’East End." },
+    { q: "Combien de victimes « canoniques » compte-t-on dans la série ?", options: ["3", "4", "5", "7"], correct: 2, explain: "On reconnaît généralement cinq victimes : Nichols, Chapman, Stride, Eddowes et Kelly." },
+    { q: "Quel événement a été appelé la « Long Night » ?", options: ["Un incendie", "Deux meurtres en une nuit le 30 septembre", "La première lettre à la presse", "L’arrestation d’un suspect"], correct: 1, explain: "Dans la nuit du 30 septembre 1888 eurent lieu les meurtres de Stride et d’Eddowes." },
+    { q: "Lequel de ces personnages figurait sur la liste des suspects ?", options: ["Charles Darwin", "Aaron Kosminski", "Oscar Wilde", "Arthur Conan Doyle"], correct: 1, explain: "Aaron Kosminski est l’un des suspects les plus connus, bien que sa culpabilité n’ait jamais été prouvée." },
+    { q: "Le criminel a-t-il été officiellement identifié et condamné ?", options: ["Oui, en 1889", "Oui, en 1900", "Non, l’affaire reste officiellement non élucidée", "Oui, en 1910"], correct: 2, explain: "L’identité de l’assassin n’a jamais été établie et l’affaire est officiellement restée non élucidée." }
+  ];
+
+  /* ---------- Compteurs ---------- */
+  function animateCount(el, target, duration = 1600) {
+    const start = performance.now();
+    function frame(now) {
+      const p = Math.min((now - start) / duration, 1);
+      el.textContent = Math.floor(p * target);
+      if (p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCount(document.getElementById('count1'), 5);
+        animateCount(document.getElementById('count2'), 3);
+        animateCount(document.getElementById('count3'), suspects.length);
+        counterObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.4 });
+  counterObserver.observe(document.getElementById('intro'));
+
+  /* ---------- Chronologie ---------- */
+  const tabsEl = document.getElementById('tabs');
+  const cardEl = document.getElementById('timelineCard');
+
+  function renderTimeline(index) {
+    const item = timeline[index];
+    cardEl.innerHTML = `
+      <div class="date">${item.date}</div>
+      <h3>${item.title}</h3>
+      <p>${item.text}</p>`;
+    [...tabsEl.children].forEach((btn, i) => btn.classList.toggle('active', i === index));
+  }
+
+  timeline.forEach((item, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab';
+    btn.textContent = item.date.split(' ').slice(0, 2).join(' ');
+    btn.addEventListener('click', () => renderTimeline(i));
+    tabsEl.appendChild(btn);
+  });
+  renderTimeline(0);
+
+  /* ---------- Victimes ---------- */
+  const victimsGrid = document.getElementById('victimsGrid');
+  victims.forEach(v => {
+    const card = document.createElement('div');
+    card.className = 'victim';
+    card.innerHTML = `
+      <div class="initials">${v.initials}</div>
+      <h3>${v.name}</h3>
+      <div class="meta">${v.age} · ${v.date}</div>
+      <div class="hint">Plus ▾</div>
+      <div class="details">${v.info}</div>`;
+    card.addEventListener('click', () => {
+      card.classList.toggle('open');
+      card.querySelector('.hint').textContent = card.classList.contains('open') ? 'Réduire ▴' : 'Plus ▾';
+    });
+    victimsGrid.appendChild(card);
+  });
+
+  /* ---------- Carte ---------- */
+  const mapInfo = document.getElementById('mapInfo');
+  const pins = document.querySelectorAll('.pin');
+  pins.forEach(pin => {
+    const id = Number(pin.dataset.id);
+    pin.addEventListener('mouseenter', () => { mapInfo.innerHTML = mapData[id]; });
+    pin.addEventListener('click', () => {
+      pins.forEach(p => p.querySelector('.core').setAttribute('r', 6));
+      pin.querySelector('.core').setAttribute('r', 8);
+      mapInfo.innerHTML = mapData[id];
+    });
+  });
+
+  /* ---------- Suspects ---------- */
+  const suspectsGrid = document.getElementById('suspectsGrid');
+  suspects.forEach(s => {
+    const el = document.createElement('div');
+    el.className = 'suspect';
+    el.innerHTML = `
+      <h3>${s.name}</h3>
+      <div class="role">${s.role}</div>
+      <p>${s.text}</p>
+      <div class="meter">
+        <small>Popularité de la théorie : ${s.pop}%</small>
+        <div class="bar"><div class="fill" data-width="${s.pop}"></div></div>
+      </div>
+      <div class="stamp">NON PROUVÉ</div>`;
+    suspectsGrid.appendChild(el);
+  });
+
+  const fillObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.fill').forEach(f => f.style.width = f.dataset.width + '%');
+        fillObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.suspect').forEach(s => fillObserver.observe(s));
+
+  /* ---------- Lettre ---------- */
+  const letterText = `Dear Boss,
+
+I keep on hearing the police have caught me but they won't fix me just yet. I have laughed when they look so clever and talk about being on the right track. That joke about Jack the Ripper is my favourite.
+
+Yours truly,
+Jack the Ripper`;
+  const letterEl = document.getElementById('letterText');
+  const signEl = document.getElementById('letterSign');
+  const letterBtn = document.getElementById('letterBtn');
+  let typing = false;
+
+  letterBtn.addEventListener('click', () => {
+    if (typing) return;
+    typing = true;
+    letterEl.textContent = '';
+    signEl.style.opacity = 0;
+    letterEl.classList.add('cursor');
+    letterBtn.disabled = true;
+    let i = 0;
+    const timer = setInterval(() => {
+      letterEl.textContent += letterText[i];
+      i++;
+      if (i >= letterText.length) {
+        clearInterval(timer);
+        letterEl.classList.remove('cursor');
+        signEl.textContent = '— Jack the Ripper';
+        signEl.style.opacity = 1;
+        signEl.style.transition = 'opacity 1s';
+        letterBtn.disabled = false;
+        letterBtn.textContent = 'Relire';
+        typing = false;
+      }
+    }, 45);
+  });
+
+  /* ---------- Quiz ---------- */
+  const quizBox = document.getElementById('quizBox');
+  let qIndex = 0;
+  let score = 0;
+
+  function renderQuestion() {
+    const q = quizData[qIndex];
+    quizBox.innerHTML = `
+      <div class="progress">Question ${qIndex + 1} sur ${quizData.length}</div>
+      <h3>${q.q}</h3>
+      <div class="options">
+        ${q.options.map((o, i) => `<button class="option" data-i="${i}">${o}</button>`).join('')}
+      </div>
+      <div class="explain"></div>
+      <div class="next-row"></div>`;
+
+    quizBox.querySelectorAll('.option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const chosen = Number(btn.dataset.i);
+        const buttons = quizBox.querySelectorAll('.option');
+        buttons.forEach(b => b.disabled = true);
+        if (chosen === q.correct) {
+          btn.classList.add('correct');
+          score++;
+        } else {
+          btn.classList.add('wrong');
+          buttons[q.correct].classList.add('correct');
+        }
+        quizBox.querySelector('.explain').textContent = q.explain;
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'btn gold';
+        nextBtn.textContent = qIndex < quizData.length - 1 ? 'Suivant →' : 'Résultat';
+        nextBtn.addEventListener('click', () => {
+          qIndex++;
+          if (qIndex < quizData.length) renderQuestion();
+          else renderResult();
+        });
+        quizBox.querySelector('.next-row').appendChild(nextBtn);
+      });
+    });
+  }
+
+  function renderResult() {
+    let verdict;
+    if (score === quizData.length) verdict = "Parfait. Scotland Yard vous aurait engagé.";
+    else if (score >= 3) verdict = "Bon résultat. Vous êtes presque un vrai détective.";
+    else verdict = "L’affaire reste ouverte. Réessayez.";
+
+    quizBox.innerHTML = `
+      <div class="result">
+        <div class="score">${score} / ${quizData.length}</div>
+        <p style="margin:14px 0 24px;">${verdict}</p>
+        <button class="btn gold" id="restartQuiz">Recommencer</button>
+      </div>`;
+    document.getElementById('restartQuiz').addEventListener('click', () => {
+      qIndex = 0;
+      score = 0;
+      renderQuestion();
+    });
+  }
+
+  renderQuestion();
+</script>
+</body>
+</html>
